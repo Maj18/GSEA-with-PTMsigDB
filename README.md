@@ -2,7 +2,7 @@
 
 
 
-## Download [PTMsigDB]([https://proteomics.broadapps.org/ptmsigdb/](https://github.com/broadinstitute/ssGSEA2.0/tree/master/db/ptmsigdb/v2.0.0/all)
+## Download [PTMsigDB](https://proteomics.broadapps.org/ptmsigdb/](https://github.com/broadinstitute/ssGSEA2.0/tree/master/db/ptmsigdb/v2.0.0/all)
 
 
 
