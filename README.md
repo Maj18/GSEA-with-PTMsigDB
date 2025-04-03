@@ -10,17 +10,18 @@
 
 ```
 ptmsigdb = GSEABase::getGmt("../data/db_ptm.sig.db.all.v2.0.0/ptm.sig.db.all.flanking.human.v2.0.0.gmt")
-ptmsigdb_KINASE0 = ptmsigdb[grepl("KINASE", names(ptmsigdb))]
-ptmsigdb_KINASE0 = lapply(ptmsigdb_KINASE0, function(K) {
-  data.frame(Kinase=K@setName, Phosphosite=K@geneIds)
+# Below we will only extract KINASE from the database, of course you can also extract PERT, DISEASE or PATH as well
+ptmsigdb_sub0 = ptmsigdb[grepl("KINASE", names(ptmsigdb))]
+ptmsigdb_sub0 = lapply(ptmsigdb_sub0, function(K) {
+  data.frame(Set=K@setName, Phosphosite=K@geneIds)
 }) %>% Reduce(rbind, .)
-ptmsigdb_KINASE2 = as.data.frame(stringr::str_split_fixed(ptmsigdb_KINASE0$Phosphosite,";",2)) %>%
+ptmsigdb_sub2 = as.data.frame(stringr::str_split_fixed(ptmsigdb_sub0$Phosphosite,";",2)) %>%
   setNames(c("Phosphosite", "Regulation"))
-dim(ptmsigdb_KINASE2)
-dim(ptmsigdb_KINASE0)
-ptmsigdb_KINASE = data.frame(Kinase=ptmsigdb_KINASE0$Kinase,
-                             Phosphosite=ptmsigdb_KINASE2$Phosphosite,
-                             Regulation=ptmsigdb_KINASE2$Regulation)
+# Only keep the upregulated phosphosites
+ptmsigdb_sub2 = ptmsigdb_sub2 %>% filter(Regulation=="up")
+ptmsigdb_sub = data.frame(Set=ptmsigdb_sub0$Set,
+                             Phosphosite=ptmsigdb_sub2$Phosphosite,
+                             Regulation=ptmsigdb_sub2$Regulation)
 ```
 
 
@@ -40,5 +41,5 @@ clusterProfiler::GSEA(geneList = gl,
                                          eps=0, 
                                          pvalueCutoff = 1,
                                          pAdjustMethod = "fdr",
-                                         TERM2GENE = ptmsigdb_KINASE)
+                                         TERM2GENE = ptmsigdb_sub)
 ```
