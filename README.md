@@ -17,9 +17,10 @@ ptmsigdb_sub0 = lapply(ptmsigdb_sub0, function(K) {
 }) %>% Reduce(rbind, .)
 ptmsigdb_sub2 = as.data.frame(stringr::str_split_fixed(ptmsigdb_sub0$Phosphosite,";",2)) %>%
   setNames(c("Phosphosite", "Regulation"))
+ptmsigdb_sub2$Set = ptmsigdb_sub0$Set
 # Only keep the upregulated phosphosites
 ptmsigdb_sub2 = ptmsigdb_sub2 %>% filter(Regulation=="up")
-ptmsigdb_sub = data.frame(Set=ptmsigdb_sub0$Set,
+ptmsigdb_sub = data.frame(Set=ptmsigdb_sub2$Set,
                              Phosphosite=ptmsigdb_sub2$Phosphosite,
                              Regulation=ptmsigdb_sub2$Regulation)
 ```
